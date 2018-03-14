@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <section role="header">
+            <h2 data-toggle="tooltip" title="Create your project!">Create your project</h2>
+            <p>Select the shape you want to create</p>
+
+            <div class="buttons">
+                <button id="arena" class="btn btn-primary">Create Arena</button>
+                <button id="hall" class="btn btn-primary">Create Hall</button>
+                <button id="rectangle" class="btn btn-primary">Rectangle</button>
+                <button id="circle" class="btn btn-primary">Circle</button>
+                <button id="triangle" class="btn btn-primary">Triangle</button>
+                <button id="polygon" class="btn btn-primary">Polygon</button>
+                <button id="line" class="btn btn-primary">Line</button>
+                <button id="polyline" class="btn btn-primary">Polyline</button>
+                <button id="segment" class="btn btn-primary">Segment</button>
+                <button id="text" class="btn btn-primary">Text</button>
+                <button id="clearCanvas" class="btn btn-primary">Clear canvas</button>
+                <button id="marker" class="btn btn-primary">Marker</button>
+                <button id="scene" class="btn btn-primary">Scene</button>
+                <button id="input-carcase" class="btn btn-primary">Input carcase</button>
+                <button id="arrow" class="btn btn-primary">Arrow</button>
+                <button id="ellipse" class="btn btn-primary">Ellipse</button>
+                <button id="enter" class="btn btn-primary">Enter</button>
+            </div>
+            <br>
+            <label for="back-color">Background Color</label>
+            <input id="back-color" value="#e2e2e2">
+            <label>Canvas-size</label>
+            <input id="canvas-height" class="canvas-size" type="number" value="700"> X
+            <input id="canvas-width" class="canvas-size" type="number" value="700">
+            <label>-</label>
+            <input id="zoom-range" type="range" step='.1'
+                   max='3' min='0' onchange='setZoom(this.value)'>+
+            <div class="buttons">
+                <input type="file" id="imageLoader" name="imageLoader" class="hidden"/>
+                <input type="file" id="imageLoaderr" name="imageLoader" class="hidden">
+                <button id="ungroup" class="btn btn-danger">Ungroup object</button>
+                <button id="openImage" class="btn btn-primary">Open image</button>
+                <button id="saveJSON" class="btn btn-primary">Save to JSON</button>
+                <button id="openJSON" class="btn btn-primary">Open JSON</button>
+                <input type="file" id="jsonLoader" name="jsonLoader" class="hidden"/>
+            </div>
+
+        </section>
+        <br>
+        <div id="dialog" hidden></div>
+
+    </div>
+    <div class="container-fluid">
+        <div class="wrapper">
+            <div id="option-window">
+                <h3>Option window</h3>
+                <div id="options">
+                    <div id="element-options" class="element-options" hidden>
+                        <h4>Position on canvas</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="element-top">Top</label>
+                                <input id="element-top" type="number">
+                            </div>
+                            <div>
+                                <label for="element-left">Left</label>
+                                <input id="element-left" type="number">
+                            </div>
+                        </div>
+                        <h4>Element options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="element-height">Height</label>
+                                <input id="element-height" type="number">
+                            </div>
+                            <div>
+                                <label for="element-width">Width</label>
+                                <input id="element-width" type="number">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="color">Color</label>
+                                <input id="color" type="text" value="green">
+                            </div>
+                            <div>
+                                <label for="opacity">Opacity</label>
+                                <input id="opacity" type="number" step="0.05" min="0" max="1">
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Border style</h4>
+                            <label for="border-style">Width</label>
+                            <input id="border-style" class="text-input" type="number"> px
+                            <label for="border-color">Color</label>
+                            <input id="border-color" type="text">
+                        </div>
+                        <h4>Text style</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="text-content">Text: </label>
+                                <input id="text-content">
+
+                                <label for="text-align">Position: </label>
+                                <select id="text-align">
+                                    <option value="center">center</option>
+                                    <option value="left">left</option>
+                                    <option value="right">right</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="font-size">Size</label>
+                                <input id="font-size" class="text-input" type="number">
+                                <label for="font-family">Font family: </label>
+                                <select id="font-family">
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Calibri">Calibri</option>
+                                    <option value="Pompadur">Pompadur</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" onclick="sendChanges();">Apply</button>
+                        </div>
+
+                    </div>
+                    <div id="ellipse-options" class="element-options" hidden>
+                        <h4>Ellipse options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="ellipse-rx">Rx</label>
+                                <input id="ellipse-rx" type="number">
+                            </div>
+                            <div>
+                                <label for="ellipse-ry">Ry</label>
+                                <input id="ellipse-ry" type="number">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="ellipse-color">Color</label>
+                                <input id="ellipse-color" type="color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="ellipse-border-color">Border Color</label>
+                                <input id="ellipse-border-color" type="color">
+                            </div>
+                            <div>
+                                <label for="ellipse-border-width">Border Width</label>
+                                <input id="ellipse-border-width" type="number">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="saveEllipse()">Apply</button>
+                        </div>
+                    </div>
+                    <div id="scene-options" class="element-options" hidden>
+                        <h3>Check scene type</h3>
+                        <div class="elem-size">
+                            <div>
+                                <label>Type scene:
+                                    <select id="scene-type">
+                                        <option value="rectangle">Rectangle</option>
+                                        <option value="ellipse" selected>Ellipse</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <h4>Scene options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="scene-width">Width</label>
+                                <input id="scene-width" type="number">
+                            </div>
+                            <div>
+                                <label for="scene-height">Height</label>
+                                <input id="scene-height" type="number">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="scene-color">Color</label>
+                                <input id="scene-color" type="color">
+                            </div>
+                            <div>
+                                <label for="scene-text-color">Text Color</label>
+                                <input id="scene-text-color" type="color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="scene-text-value">Text Value</label>
+                                <input id="scene-text-value">
+                            </div>
+                            <div>
+                                <label for="scene-text-size">Text Size</label>
+                                <input id="scene-text-size" type="number">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="sendScene();">Apply</button>
+                        </div>
+                    </div>
+                    <div id="segment-options" class="element-options" hidden>
+                        <h4>Segment Options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="top-radius">Top Circle Radius</label>
+                                <input id="top-radius" type="number">
+                            </div>
+                            <div>
+                                <label for="bottom-radius">Bottom Circle Radius</label>
+                                <input id="bottom-radius" type="number">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="line-segment-width">Line Width</label>
+                                <input id="line-segment-width" type="number">
+                            </div>
+                            <div>
+                                <label for="line-segment-color">Line Color</label>
+                                <input id="line-segment-color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="start-angle">Start Angle</label>
+                                <input id="start-angle" type="number">
+                            </div>
+                            <div>
+                                <label for="end-angle">End Angle</label>
+                                <input id="end-angle" type="number">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="rows-number">Number of rows</label>
+                                <input id="rows-number" type="number" value="7">
+                            </div>
+                            <div>
+                                <label for="places">Places</label>
+                                <input id="places" type="number" value="10" min="1">
+                                <label for="places-step">Step</label>
+                                <input id="places-step" type="number" value="1" min="0" max="2">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="sendSegment();">Apply</button>
+                        </div>
+                    </div>
+                    <div id="arena-options" class="element-options" hidden>
+                        <h4>Arena Options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="arena-top-radius">Top Circle Radius</label>
+                                <input id="arena-top-radius" type="number">
+                            </div>
+                            <div>
+                                <label for="arena-top-color">Top Circle Color</label>
+                                <input id="arena-top-color" type="color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="arena-bottom-radius">Bottom Circle Radius</label>
+                                <input id="arena-bottom-radius" type="number">
+                            </div>
+                            <div>
+                                <label for="arena-bottom-color">Bottom Circle Color</label>
+                                <input id="arena-bottom-color" type="color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="line-arena-width">Line Width</label>
+                                <input id="line-arena-width" type="number">
+                            </div>
+                            <div>
+                                <label for="line-arena-color">Border Color</label>
+                                <input id="line-arena-color" type="color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="input-num">Number input/output</label>
+                                <input id="input-num" type="number" min="1" max="3" value="1">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="sendArena();">Apply</button>
+                            <button class="btn btn-primary" onclick="rows();" style="display:none;">Rows</button>
+                            <button id="add-row" class="btn btn-primary">Add additional row</button>
+                        </div>
+                    </div>
+                    <div id="hall-options" class="element-options" hidden>
+                        <h4>Hall Options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-height">Height</label>
+                                <input id="hall-height" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="hall-width">Width</label>
+                                <input id="hall-width" type="number" min="0">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-color">Color</label>
+                                <input id="hall-color" type="color">
+                            </div>
+                            <div>
+                                <label for="hall-opacity">Opacity</label>
+                                <label>
+                                    <input id="hall-opacity" type="checkbox" name="checkbox"> opacity
+                                </label>
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-stroke">Line Width</label>
+                                <input id="hall-stroke" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="hall-border">Border</label>
+                                <label>
+                                    <input id="hall-border" type="checkbox" name="checkbox" checked> visible
+                                </label>
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-skewx">Skew X</label>
+                                <input id="hall-skewx" type="range" min="0" max="80" step="1" value="0">
+                            </div>
+                            <div>
+                                <label for="hall-skewy">Skew Y</label>
+                                <input id="hall-skewy" type="range" min="0" max="80" step="1" value="0">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-place-padding">Place padding</label>
+                                <input id="hall-place-padding" type="number" min="1" value="4">
+                            </div>
+                            <div>
+                                <label for="hall-row-padding">Row padding</label>
+                                <input id="hall-row-padding" type="number" min="1" value="4">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-rows">Rows</label>
+                                <input id="hall-rows" type="number" min="1" value="1">
+                            </div>
+                            <div>
+                                <label for="hall-place-size">Place size</label>
+                                <input id="hall-place-size" type="number" min="2" value="4">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="hall-places">Places</label>
+                                <input id="hall-places" type="number" min="1" value="1">
+                            </div>
+                            <div>
+                                <label for="hall-places-type">Places</label>
+                                <select id="hall-places-type" class="selectpicker">
+                                    <option value="circle">Circle</option>
+                                    <option value="rectangle">Rectangle</option>
+                                    <option value="place-model">Place Model</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="sector elem-size">
+                            <div>
+                                <label for="hallrow-1-number">Row Number</label>
+                                <input id="hallrow-1-number" type="number" min="1" value="1" disabled>
+                            </div>
+                            <div>
+                                <label for="hallrow-1-price">Place Price</label>
+                                <input id="hallrow-1-price">
+                            </div>
+                            <div>
+                                <label for="hallrow-1-color">Place Color</label>
+                                <input id="hallrow-1-color" type="color" value="#886de5">
+                            </div>
+                        </div>
+                        <div class="sector-button">
+                            <button id="add-hall" class="btn btn-primary" onclick="addHallPlaces()">Apply</button>
+                        </div>
+                    </div>
+                    <div id="add-row-property" class="element-options" hidden>
+                        <h4>Add Additional Row</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="add-row-select">Check radius</label>
+                                <select id="add-row-select" class="selectpicker">
+                                    <option value="top">Top</option>
+                                    <option value="bottom">Bottom</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="add-row-radius">Circle radius</label>
+                                <input id="add-row-radius" type="number" min="1">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="add-row-sectors">Sectors</label>
+                                <input id="add-row-sectors" type="number" min="0" value="1">
+                            </div>
+                            <div>
+                                <label for="add-row-places">Places</label>
+                                <input id="add-row-places" type="number" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="add-row-start">Start Angle</label>
+                                <input id="add-row-start" type="number">
+                            </div>
+                            <div>
+                                <label for="add-row-end">End Angle</label>
+                                <input id="add-row-end" type="number">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label>
+                                    <input id="add-row-remove" type="checkbox" name="checkbox" checked>
+                                    Remove circle
+                                </label>
+                            </div>
+                        </div>
+                        <div class="sector elem-size">
+                            <div>
+                                <label for="sector-1-number">Sector Number</label>
+                                <input id="sector-1-number" type="number" min="1" value="1" disabled>
+                                <label for="sector-1-row">Row Number</label>
+                                <input id="sector-1-row" type="number" min="1">
+                            </div>
+                            <div>
+                                <label for="sector-1-price">Sector Price</label>
+                                <input id="sector-1-price">
+                                <label for="sector-1-color">Sector Color</label>
+                                <input id="sector-1-color" type="color" value="#886de5">
+                            </div>
+                        </div>
+                        <div class="sector-button">
+                            <button class="btn btn-primary" onclick="addNewRow();">Add Sector</button>
+                        </div>
+                    </div>
+                    <div id="text-options" class="element-options" hidden>
+                        <h4>Arena Options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="text-value">Text content</label>
+                                <input id="text-value">
+                            </div>
+                            <div>
+                                <label for="text-style">Font Style</label>
+                                <input id="text-style">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="text-size">Font Size</label>
+                                <input id="text-size" type="number" min="1">
+                            </div>
+                            <div>
+                                <label for="text-color">Text Color</label>
+                                <input id="text-color">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="label-width">Label Width</label>
+                                <input id="label-width" type="number" min="1">
+                            </div>
+                            <div>
+                                <label for="label-height">Label Height</label>
+                                <input id="label-height" type="number" min="1">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="text-justify">Justify</label>
+                                <select id="text-justify">
+                                    <option value="left">Left</option>
+                                    <option value="center">Center</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="changeTextProperty();">Change Text</button>
+                        </div>
+                    </div>
+                    <div id="sector-options" class="element-options" hidden>
+                        <h4>Sector Options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="current-sector">Number of sectors</label>
+                                <input id="current-sector" type="number" min="1" value="1">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="sectors-num">Number of sectors</label>
+                                <input id="sectors-num" type="number" min="1" value="1">
+                            </div>
+                            <div>
+                                <label for="rows-num">Number of rows</label>
+                                <input id="rows-num" type="number" min="1" value="1">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="places-num">Places</label>
+                                <input id="places-num" type="number" min="0" value="5">
+                            </div>
+                            <div>
+                                <label for="step-inc">Step</label>
+                                <input id="step-inc" type="number" min="0" value="1">
+                            </div>
+                        </div>
+                        <div class="sector elem-size">
+                            <div>
+                                <label for="row-1-number">Row Number</label>
+                                <input id="row-1-number" type="number" min="1" value="1" disabled>
+                            </div>
+                            <div>
+                                <label for="row-1-price">Place Price</label>
+                                <input id="row-1-price">
+                            </div>
+                            <div>
+                                <label for="row-1-color">Place Color</label>
+                                <input id="row-1-color" type="color" value="#886de5">
+                            </div>
+                        </div>
+                        <div class="sector-button">
+                            <button id="row-click" class="btn btn-primary"
+                                    onclick="createCurrentSector();">Create Sector</button>
+                        </div>
+                    </div>
+                    <div id="place-options" class="element-options" hidden>
+                        <h4>Place Options</h4>
+                        <div class="elem-size">
+                            <div>
+                                <label for="place-color">Change Color</label>
+                                <input id="place-color" type="color">
+                            </div>
+                            <div>
+                                <label for="place-price">Change Price</label>
+                                <input id="place-price">
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <button class="btn btn-danger"
+                                        onclick="removePlace();">Remove Place</button>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary"
+                                        onclick="changePlace();">Change</button>
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <button class="btn btn-primary"
+                                        onclick="clonePlace();">Clone Place</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="enter-options" class="element-options" hidden>
+                        <h3>Check enter type</h3>
+                        <div class="elem-size">
+                            <div>
+                                <label for="enter-type">Type enter:</label>
+                                <select id="enter-type">
+                                    <option value="enter1">Enter 1</option>
+                                    <option value="enter2">Enter 2</option>
+                                    <option value="enter3">Enter 3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="elem-size">
+                            <div>
+                                <label for="enter-color">Color</label>
+                                <input id="enter-color" type="color">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="sendEnter();">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-builder">
+                <div id="fabric-container">
+                    <canvas id="fabric" width=700" height="700"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.0.1/fabric.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/arena.js"></script>
+    <script src="js/hall.js"></script>
+    <script src="js/autorefresh.js"></script>
+</body>
+</html>

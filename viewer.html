@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Viewer</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+    <div class="container-fluid">
+        <section role="header">
+            <h2 data-toggle="tooltip" title="Create your project!">Arena Viewer</h2>
+            <p>Select option..</p>
+            <div class="buttons">
+                <input type="file" id="imageLoader" name="imageLoader" class="hidden"/>
+                <input type="file" id="imageLoaderr" name="imageLoader" class="hidden">
+                <button id="ungroup" class="btn btn-danger">Ungroup object</button>
+                <button id="openImage" class="btn btn-primary">Open image</button>
+                <button id="openJSON" class="btn btn-primary">Open JSON</button>
+                <input type="file" id="jsonLoader" name="jsonLoader" class="hidden"/>
+            </div>
+        </section>
+        <br>
+
+    </div>
+    <div class="container-fluid">
+        <div id="price-table"></div>
+        <div class="wrapper">
+            <div class="viewer">
+                <div id="fabric-container">
+                    <canvas id="fabric" width="800" height="700"></canvas>
+                </div>
+            </div>
+            <div class="tickets-sidebar hidden">
+                <div id="tickets"></div>
+                <button id="tickets-buy" class="btn btn-primary">Buy tickets</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.0.1/fabric.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/viewer.js"></script>
+</body>
+</html>
